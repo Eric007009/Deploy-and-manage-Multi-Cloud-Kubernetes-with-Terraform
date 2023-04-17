@@ -6,4 +6,4 @@ tutorial](https://developer.hashicorp.com/terraform/tutorials/networking/multicl
 configuration files for you to use to learn deploy a Consul-federated
 multi-cluster Kubernetes setup.
 
-#ITP 4121 Project
+# ITP 4121 Project
