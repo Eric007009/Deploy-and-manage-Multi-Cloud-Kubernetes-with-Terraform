@@ -6,6 +6,16 @@ variable "region" {
   description = "region"
 }
 
+variable "zone" {
+  type    = string
+  default = "asia-east2-a"
+}
+
+variable "image" {
+  type    = string
+  default = "debian-cloud/debian-11"
+}
+
 provider "google" {
   project = var.project_id
   region  = var.region
@@ -23,4 +33,29 @@ resource "google_compute_subnetwork" "subnet" {
   region        = var.region
   network       = google_compute_network.vpc.name
   ip_cidr_range = "10.10.0.0/24"
+}
+
+resource "google_compute_subnetwork" "subnet2" {
+  name          = "${var.project_id}-subnet2"
+  region        = var.region
+  network       = google_compute_network.vpc.name
+  ip_cidr_range = "10.10.1.0/24"
+}
+
+# Virtual machine
+resource "google_compute_instance" "vm" {
+  name         = "my-vm"
+  machine_type = "n1-standard-1"
+  zone         = var.zone
+  boot_disk {
+    initialize_params {
+      image = var.image
+    }
+  }
+  network_interface {
+    subnetwork = google_compute_subnetwork.subnet2.self_link
+    access_config {
+      // Ephemeral IP
+    }
+  }
 }
